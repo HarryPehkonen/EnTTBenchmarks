@@ -1,0 +1,41 @@
+2025-03-09T17:29:05-07:00
+Running ./EnTTBenchmarks
+Run on (4 X 3600 MHz CPU s)
+CPU Caches:
+  L1 Data 32 KiB (x2)
+  L1 Instruction 32 KiB (x2)
+  L2 Unified 256 KiB (x2)
+  L3 Unified 4096 KiB (x1)
+Load Average: 1.25, 1.40, 1.44
+***WARNING*** CPU scaling is enabled, the benchmark real time measurements may be noisy and will incur extra overhead.
+--------------------------------------------------------------------------
+Benchmark                                Time             CPU   Iterations
+--------------------------------------------------------------------------
+BM_SingleComponentView/1000           2.65 us         2.65 us       260589
+BM_SingleComponentView/4096           11.0 us         10.9 us        64132
+BM_SingleComponentView/32768          87.4 us         87.4 us         8021
+BM_SingleComponentView/100000          271 us          270 us         2567
+BM_MultiComponentView/1000            4.30 us         4.30 us       157428
+BM_MultiComponentView/4096            21.5 us         21.5 us        29444
+BM_MultiComponentView/32768            185 us          185 us         3815
+BM_MultiComponentView/100000           571 us          571 us         1247
+BM_MultiComponentViewGet/1000         4.90 us         4.90 us       116946
+BM_MultiComponentViewGet/4096         21.6 us         21.6 us        31756
+BM_MultiComponentViewGet/32768         187 us          186 us         3948
+BM_MultiComponentViewGet/100000        577 us          577 us         1215
+BM_ComplexView/1000                   2.88 us         2.88 us       223437
+BM_ComplexView/4096                   15.5 us         15.5 us        39653
+BM_ComplexView/32768                   178 us          178 us         4020
+BM_ComplexView/100000                  631 us          631 us         1185
+BM_LimitedComplexView/1000            4.62 us         4.62 us       133083
+BM_LimitedComplexView/4096            21.7 us         21.6 us        32456
+BM_LimitedComplexView/32768            183 us          182 us         3926
+BM_LimitedComplexView/100000           588 us          587 us         1268
+BM_StorageDirectAccess/1000           2.64 us         2.64 us       265566
+BM_StorageDirectAccess/4096           10.8 us         10.8 us        64187
+BM_StorageDirectAccess/32768          86.7 us         86.7 us         7900
+BM_StorageDirectAccess/100000          268 us          268 us         2581
+BM_FilteredViewIteration/1000         2.65 us         2.65 us       257110
+BM_FilteredViewIteration/4096         11.1 us         11.1 us        61005
+BM_FilteredViewIteration/32768        89.5 us         89.5 us         7860
+BM_FilteredViewIteration/100000        280 us          279 us         2550

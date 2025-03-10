@@ -1,5 +1,6 @@
 #include <benchmark/benchmark.h>
 #include <entt/entt.hpp>
+#include <entt/entity/registry.hpp>
 #include <random>
 #include <vector>
 
@@ -22,6 +23,7 @@ struct Name {
 
 // Helper function to setup a registry with entities and components
 entt::registry setup_registry(std::size_t entity_count) {
+    // Create a standard EnTT registry
     entt::registry registry;
     
     // Create entities with different component combinations
@@ -97,24 +99,6 @@ static void BM_MultiComponentView(benchmark::State& state) {
     
     benchmark::DoNotOptimize(sum);
 }
-
-/// // Benchmark: Iteration using multi-component view but only unpacking the Position component
-/// static void BM_MultiComponentViewPartialUnpack(benchmark::State& state) {
-///     auto registry = setup_registry(state.range(0));
-///     
-///     float sum = 0.0f;
-///     
-///     for (auto _ : state) {
-///         auto view = registry.view<Position, Velocity, Health>();
-///         
-///         // Only unpack the Position component
-///         for (auto [entity, position] : view.each<Position>()) {
-///             sum += position.x + position.y + position.z;
-///         }
-///     }
-///     
-///     benchmark::DoNotOptimize(sum);
-/// }
 
 // Benchmark: Iteration using get<Position>() instead of unpacking
 static void BM_MultiComponentViewGet(benchmark::State& state) {
@@ -192,13 +176,36 @@ static void BM_StorageDirectAccess(benchmark::State& state) {
     benchmark::DoNotOptimize(sum);
 }
 
+// Removed BM_RegistryEach as it's not compatible with EnTT v3.14.0
+// Likewise, BM_SnapshotIteration had API compatibility issues
+// Keeping only the benchmarks that work with the current EnTT version
+
+static void BM_FilteredViewIteration(benchmark::State& state) {
+    auto registry = setup_registry(state.range(0));
+
+    float sum = 0.0f;
+
+    for (auto _ : state) {
+        auto view = registry.view<Position>();
+        view.each([&](auto entity, auto& position) {
+            if (position.x > 0.0f) {
+                sum += position.x + position.y + position.z;
+            }
+        });
+    }
+
+    benchmark::DoNotOptimize(sum);
+}
+
+// Removed BM_CustomStorageIteration as it had compatibility issues
+
 // Register benchmarks with different entity counts
 BENCHMARK(BM_SingleComponentView)->Range(1000, 100000)->Unit(benchmark::kMicrosecond);
 BENCHMARK(BM_MultiComponentView)->Range(1000, 100000)->Unit(benchmark::kMicrosecond);
-/// BENCHMARK(BM_MultiComponentViewPartialUnpack)->Range(1000, 100000)->Unit(benchmark::kMicrosecond);
 BENCHMARK(BM_MultiComponentViewGet)->Range(1000, 100000)->Unit(benchmark::kMicrosecond);
 BENCHMARK(BM_ComplexView)->Range(1000, 100000)->Unit(benchmark::kMicrosecond);
 BENCHMARK(BM_LimitedComplexView)->Range(1000, 100000)->Unit(benchmark::kMicrosecond);
 BENCHMARK(BM_StorageDirectAccess)->Range(1000, 100000)->Unit(benchmark::kMicrosecond);
+BENCHMARK(BM_FilteredViewIteration)->Range(1000, 100000)->Unit(benchmark::kMicrosecond);
 
 BENCHMARK_MAIN();
